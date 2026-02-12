@@ -14,11 +14,12 @@ const graphPlot = document.getElementById('graph-plot');
 const graphStatus = document.getElementById('graph-status');
 const graphCanvas = document.getElementById('graph-canvas');
 
-const matrixA = document.getElementById('matrix-a');
-const matrixB = document.getElementById('matrix-b');
-const matrixResult = document.getElementById('matrix-result');
+const matrixAContainer = document.getElementById('matrix-a-container');
+const matrixBContainer = document.getElementById('matrix-b-container');
+const matrixResultContainer = document.getElementById('matrix-result-container');
 const matrixStatus = document.getElementById('matrix-status');
 const matrixButtons = document.querySelectorAll('[data-matrix]');
+const sizeButtons = document.querySelectorAll('.size-btn');
 
 const derivFx = document.getElementById('deriv-fx');
 const derivX = document.getElementById('deriv-x');
@@ -36,7 +37,86 @@ const sumStatus = document.getElementById('sum-status');
 
 const mathInstance = window.math;
 
+// Додаємо функцію котангенса до Math.js
+mathInstance.import({
+    cot: function(x) {
+        return 1 / Math.tan(x);
+    }
+}, { override: true });
+
 let chart = null;
+let currentMatrixSize = 2;
+
+// Функція створення візуальної матриці
+const createMatrix = (container, size, readOnly = false, defaultValue = '0') => {
+    container.innerHTML = '';
+    const table = document.createElement('div');
+    table.className = 'matrix-grid-table';
+    table.style.setProperty('--matrix-cols', size);
+    
+    for (let i = 0; i < size * size; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'matrix-cell';
+        input.value = defaultValue;
+        input.readOnly = readOnly;
+        input.dataset.row = Math.floor(i / size);
+        input.dataset.col = i % size;
+        table.appendChild(input);
+    }
+    
+    container.appendChild(table);
+};
+
+// Зчитування значень з візуальної матриці
+const getMatrixValues = (container) => {
+    const inputs = container.querySelectorAll('.matrix-cell');
+    const size = Math.sqrt(inputs.length);
+    const matrix = [];
+    
+    for (let i = 0; i < size; i++) {
+        const row = [];
+        for (let j = 0; j < size; j++) {
+            const index = i * size + j;
+            const value = parseFloat(inputs[index].value) || 0;
+            row.push(value);
+        }
+        matrix.push(row);
+    }
+    
+    return matrix;
+};
+
+// Відображення матриці результату
+const displayMatrix = (container, matrix) => {
+    const size = matrix.length;
+    container.innerHTML = '';
+    const table = document.createElement('div');
+    table.className = 'matrix-grid-table';
+    table.style.setProperty('--matrix-cols', size);
+    
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'matrix-cell';
+            input.value = matrix[i][j].toFixed(2);
+            input.readOnly = true;
+            table.appendChild(input);
+        }
+    }
+    
+    container.appendChild(table);
+};
+
+// Ініціалізація матриць
+const initializeMatrices = (size) => {
+    currentMatrixSize = size;
+    createMatrix(matrixAContainer, size, false, '0');
+    createMatrix(matrixBContainer, size, false, '0');
+    matrixResultContainer.innerHTML = '';
+    matrixStatus.textContent = '';
+};
 
 const translations = {
     uk: {
@@ -60,7 +140,7 @@ const translations = {
         'matrix.labelA': 'Матриця A',
         'matrix.labelB': 'Матриця B',
         'matrix.format': 'Формат: 1,2;3,4',
-        'matrix.size': 'Такий самий розмір, як A',
+        'matrix.size': 'Розмір матриці',
         'matrix.operation': 'Операція',
         'matrix.result': 'Результат',
         'deriv.label': 'f(x)',
@@ -105,7 +185,7 @@ const translations = {
         'matrix.labelA': 'Matrix A',
         'matrix.labelB': 'Matrix B',
         'matrix.format': 'Format: 1,2;3,4',
-        'matrix.size': 'Same size as A',
+        'matrix.size': 'Matrix Size',
         'matrix.operation': 'Operation',
         'matrix.result': 'Result',
         'deriv.label': 'f(x)',
@@ -266,14 +346,18 @@ const plotGraph = () => {
 
     const expression = normalizeExpression(expr);
     const dataPoints = [];
-    const steps = 240;
+    const steps = 480; // Збільшена кількість точок для кращої деталізації
+    const threshold = 1e6; // Поріг для фільтрації екстремальних значень біля асимптот
+    
     for (let i = 0; i < steps; i += 1) {
         const x = minValue + (maxValue - minValue) * (i / (steps - 1));
         try {
             const y = mathInstance.evaluate(expression, { x });
-            if (Number.isFinite(y)) {
+            // Фільтруємо нескінченні та екстремально великі значення
+            if (Number.isFinite(y) && Math.abs(y) < threshold) {
                 dataPoints.push({ x, y });
             } else {
+                // Додаємо null для розриву графіка на асимптотах
                 dataPoints.push({ x, y: null });
             }
         } catch {
@@ -292,6 +376,13 @@ const plotGraph = () => {
                         borderColor: '#f59f0b',
                         borderWidth: 2,
                         pointRadius: 0,
+                        spanGaps: false, // Не з'єднувати точки через розриви (асимптоти)
+                        segment: {
+                            borderColor: ctx => {
+                                // Пропускаємо лінії між null значеннями
+                                return ctx.p0.skip || ctx.p1.skip ? 'transparent' : '#f59f0b';
+                            }
+                        }
                     },
                 ],
             },
@@ -301,22 +392,65 @@ const plotGraph = () => {
                     easing: 'easeOutQuart',
                 },
                 parsing: false,
+                responsive: true,
+                maintainAspectRatio: true,
                 scales: {
                     x: {
                         type: 'linear',
+                        position: 'center',
                         grid: {
-                            color: 'rgba(255,255,255,0.06)',
+                            color: (context) => {
+                                if (context.tick.value === 0) {
+                                    return 'rgba(255, 255, 255, 0.5)'; // Вісь X яскравіша
+                                }
+                                return 'rgba(100, 150, 200, 0.15)'; // Сітка видніша
+                            },
+                            lineWidth: (context) => {
+                                return context.tick.value === 0 ? 2 : 1;
+                            },
+                            drawBorder: true,
+                            drawTicks: true,
                         },
                         ticks: {
                             color: '#cbd5f5',
+                            font: {
+                                size: 11,
+                            },
+                            stepSize: undefined, // Автоматичний крок
+                        },
+                        border: {
+                            display: true,
+                            color: 'rgba(255, 255, 255, 0.3)',
+                            width: 2,
                         },
                     },
                     y: {
+                        type: 'linear',
+                        position: 'center',
                         grid: {
-                            color: 'rgba(255,255,255,0.06)',
+                            color: (context) => {
+                                if (context.tick.value === 0) {
+                                    return 'rgba(255, 255, 255, 0.5)'; // Вісь Y яскравіша
+                                }
+                                return 'rgba(100, 150, 200, 0.15)'; // Сітка видніша
+                            },
+                            lineWidth: (context) => {
+                                return context.tick.value === 0 ? 2 : 1;
+                            },
+                            drawBorder: true,
+                            drawTicks: true,
                         },
                         ticks: {
                             color: '#cbd5f5',
+                            font: {
+                                size: 11,
+                            },
+                            stepSize: undefined, // Автоматичний крок
+                        },
+                        border: {
+                            display: true,
+                            color: 'rgba(255, 255, 255, 0.3)',
+                            width: 2,
                         },
                     },
                 },
@@ -324,7 +458,27 @@ const plotGraph = () => {
                     legend: {
                         labels: {
                             color: '#cbd5f5',
+                            font: {
+                                size: 13,
+                            },
                         },
+                    },
+                    tooltip: {
+                        enabled: true,
+                        mode: 'nearest',
+                        intersect: false,
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        titleColor: '#f8fafc',
+                        bodyColor: '#cbd5e1',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `x: ${context.parsed.x.toFixed(3)}, y: ${context.parsed.y.toFixed(3)}`;
+                            }
+                        }
                     },
                 },
             },
@@ -353,36 +507,37 @@ const parseMatrix = (text) => {
 };
 
 const formatMatrix = (matrix) => {
-    return matrix
-        .toArray()
-        .map((row) => row.map((value) => Number(value).toFixed(4)).join(' '))
-        .join('\n');
+    return matrix.toArray();
 };
 
 const runMatrixOperation = (type) => {
     matrixStatus.textContent = '';
-    matrixResult.value = '';
+    matrixResultContainer.innerHTML = '';
+    
     try {
-        const a = mathInstance.matrix(parseMatrix(matrixA.value));
-        const b = mathInstance.matrix(parseMatrix(matrixB.value));
+        const aValues = getMatrixValues(matrixAContainer);
+        const bValues = getMatrixValues(matrixBContainer);
+        
+        const a = mathInstance.matrix(aValues);
+        const b = mathInstance.matrix(bValues);
+        
         let result;
         if (type === 'add') {
             result = mathInstance.add(a, b);
-            matrixResult.value = formatMatrix(result);
+            displayMatrix(matrixResultContainer, formatMatrix(result));
         } else if (type === 'mul') {
             result = mathInstance.multiply(a, b);
-            matrixResult.value = formatMatrix(result);
+            displayMatrix(matrixResultContainer, formatMatrix(result));
         } else if (type === 'det') {
-            matrixResult.value = String(mathInstance.det(a));
+            const detValue = mathInstance.det(a);
+            const detDisplay = document.createElement('div');
+            detDisplay.className = 'result-box';
+            detDisplay.textContent = `det(A) = ${detValue.toFixed(4)}`;
+            matrixResultContainer.appendChild(detDisplay);
         }
     } catch (error) {
-        if (error.message === 'matrix.invalid') {
-            matrixStatus.textContent = t('status.matrix.invalid');
-        } else if (error.message === 'matrix.rows') {
-            matrixStatus.textContent = t('status.matrix.rows');
-        } else {
-            matrixStatus.textContent = t('status.matrix.error');
-        }
+        matrixStatus.textContent = t('status.matrix.error');
+        console.error('Matrix operation error:', error);
     }
 };
 
@@ -444,6 +599,19 @@ const computeSum = () => {
 sumCalc.addEventListener('click', computeSum);
 
 plotGraph();
+
+// Ініціалізація матриць
+initializeMatrices(2);
+
+// Обробники для вибору розміру матриці
+sizeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const size = parseInt(button.dataset.size);
+        sizeButtons.forEach(btn => btn.classList.remove('is-active'));
+        button.classList.add('is-active');
+        initializeMatrices(size);
+    });
+});
 
 if (langSelect) {
     const stored = localStorage.getItem('calc-lang');
