@@ -22,3 +22,29 @@ Open `main.html` in a browser.
 - Math.js
 - Chart.js
 - Tailwind CSS
+
+# Tkinter Calculator
+
+A desktop calculator built with Tkinter. Includes a scientific mode and a function plot panel.
+
+## Features
+- Standard operations: add, subtract, multiply, divide
+- Scientific functions: sin, cos, tan, log, ln, sqrt, x^2, 1/x, pi, e
+- Function plotter with adjustable x-range
+- Theme toggle and animated button feedback
+
+## Run
+1. Open a terminal in this folder.
+2. Run:
+   
+   ```bash
+   python calculator.py
+   ```
+
+## Controls
+- Keyboard input for digits and operators
+- `t` toggles theme
+- `s` toggles the scientific panel
+
+## Notes
+- The plotter accepts functions like `sin(x)` or `x^2`.
