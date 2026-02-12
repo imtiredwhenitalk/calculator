@@ -274,6 +274,19 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+#graph-canvas {
+    background: linear-gradient(135deg, #121a2b 0%, #1a2538 100%);
+    border: 2px solid rgba(100, 150, 200, 0.4);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100%;
+}
+
 .panel-label {
     font-size: 13px;
     font-weight: 600;
@@ -331,6 +344,145 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     gap: 8px;
+}
+
+/* Матриці */
+.matrix-size-selector {
+    margin-bottom: 16px;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.size-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.size-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.size-btn.is-active {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-color: #3b82f6;
+    color: #fff;
+    font-weight: 600;
+}
+
+.matrix-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding: 12px 20px;
+    margin: 12px 0;
+}
+
+.matrix-container::before,
+.matrix-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    border-color: rgba(255, 255, 255, 0.4);
+    border-style: solid;
+}
+
+.matrix-container::before {
+    left: 0;
+    border-width: 2px 0 2px 2px;
+    border-radius: 4px 0 0 4px;
+}
+
+.matrix-container::after {
+    right: 0;
+    border-width: 2px 2px 2px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.matrix-grid-table {
+    display: grid;
+    gap: 6px;
+    grid-template-columns: repeat(var(--matrix-cols), 1fr);
+}
+
+.matrix-cell {
+    width: 50px;
+    height: 40px;
+    padding: 4px 8px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.matrix-cell:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.matrix-cell:hover:not(:focus) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.matrix-cell:read-only {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    cursor: default;
+}
+
+.matrix-cell:read-only:hover {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .matrix-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .matrix-cell {
+        width: 42px;
+        height: 36px;
+        font-size: 13px;
+        padding: 2px 4px;
+    }
+    
+    .matrix-container {
+        padding: 8px 16px;
+    }
+    
+    .size-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
 }
 
 @keyframes fadeUp {
