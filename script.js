@@ -10,9 +10,11 @@ const langSelect = document.getElementById('lang-select');
 const graphInput = document.getElementById('graph-input');
 const graphMin = document.getElementById('graph-min');
 const graphMax = document.getElementById('graph-max');
+const graphMultiple = document.getElementById('graph-multiple');
 const graphPlot = document.getElementById('graph-plot');
 const graphStatus = document.getElementById('graph-status');
 const graphCanvas = document.getElementById('graph-canvas');
+const graphLegend = document.getElementById('graph-legend');
 
 const matrixAContainer = document.getElementById('matrix-a-container');
 const matrixBContainer = document.getElementById('matrix-b-container');
@@ -34,6 +36,16 @@ const sumEnd = document.getElementById('sum-end');
 const sumCalc = document.getElementById('sum-calc');
 const sumResult = document.getElementById('sum-result');
 const sumStatus = document.getElementById('sum-status');
+const sumInfo = document.getElementById('sum-info');
+
+const integralExpr = document.getElementById('integral-expr');
+const integralLower = document.getElementById('integral-lower');
+const integralUpper = document.getElementById('integral-upper');
+const integralSteps = document.getElementById('integral-steps');
+const integralCalc = document.getElementById('integral-calc');
+const integralResult = document.getElementById('integral-result');
+const integralStatus = document.getElementById('integral-status');
+const integralInfo = document.getElementById('integral-info');
 
 const mathInstance = window.math;
 
@@ -48,7 +60,7 @@ let chart = null;
 let currentMatrixSize = 2;
 
 // Функція створення візуальної матриці
-const createMatrix = (container, size, readOnly = false, defaultValue = '0') => {
+const createMatrix = (container, size, readOnly = false, defaultValue = '') => {
     container.innerHTML = '';
     const table = document.createElement('div');
     table.className = 'matrix-grid-table';
@@ -88,18 +100,21 @@ const getMatrixValues = (container) => {
 };
 
 // Відображення матриці результату
-const displayMatrix = (container, matrix) => {
+const displayMatrix = (container, matrix, isResult = false) => {
     const size = matrix.length;
     container.innerHTML = '';
     const table = document.createElement('div');
     table.className = 'matrix-grid-table';
+    if (isResult) {
+        table.classList.add('matrix-result');
+    }
     table.style.setProperty('--matrix-cols', size);
     
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             const input = document.createElement('input');
             input.type = 'text';
-            input.className = 'matrix-cell';
+            input.className = isResult ? 'matrix-cell matrix-cell-result' : 'matrix-cell';
             input.value = matrix[i][j].toFixed(2);
             input.readOnly = true;
             table.appendChild(input);
@@ -112,8 +127,8 @@ const displayMatrix = (container, matrix) => {
 // Ініціалізація матриць
 const initializeMatrices = (size) => {
     currentMatrixSize = size;
-    createMatrix(matrixAContainer, size, false, '0');
-    createMatrix(matrixBContainer, size, false, '0');
+    createMatrix(matrixAContainer, size, false, '');
+    createMatrix(matrixBContainer, size, false, '');
     matrixResultContainer.innerHTML = '';
     matrixStatus.textContent = '';
 };
@@ -132,11 +147,17 @@ const translations = {
         'tab.graph': 'Графік',
         'tab.matrix': 'Матриці',
         'tab.derivative': 'Похідна',
-        'tab.sum': 'Сума',
-        'graph.label': 'Функція f(x)',
+        'tab.sum': 'Сума (Σ)',
+        'tab.integral': 'Інтеграл (∫)',
+        'graph.label': 'y = f(x)',
+        'graph.range': 'Діапазон осі X',
+        'graph.rangeHint': 'Введіть початок і кінець діапазону',
+        'graph.multiple': 'Декілька функцій',
+        'graph.multipleHint': 'Через крапку з комою (;)',
+        'graph.title': 'Побудова графіка функції',
         'graph.step1': 'Крок 1: Введіть функцію через x.',
-        'graph.step2': 'Крок 2: Задайте діапазон. Приклад: sin(x) + x^2',
-        'graph.plot': 'Побудувати',
+        'graph.step2': 'Крок 2: Задайте діапазон. Приклад: sin(x); cos(x)',
+        'graph.plot': ' Побудувати',
         'matrix.labelA': 'Матриця A',
         'matrix.labelB': 'Матриця B',
         'matrix.format': 'Формат: 1,2;3,4',
@@ -148,12 +169,25 @@ const translations = {
         'deriv.x0': 'x0',
         'deriv.h': 'h',
         'deriv.step': 'Крок h для центральної різниці',
-        'sum.label': 'Сума виразу за n',
-        'sum.example': 'Приклад: 1/(n^2)',
-        'sum.range': 'Діапазон: від .. до',
+        'deriv.calc': 'Обчислити похідну',
+        'sum.label': 'f(n) - вираз',
+        'sum.example': 'Приклад: 1/(n^2), 2*n+1, n^3',
+        'sum.range': 'Діапазон: від першого до останнього значення',
+        'sum.start': 'Початок (n):',
+        'sum.end': 'Кінець (n):',
+        'sum.calc': '∑ Обчислити суму',
+        'integral.label': 'f(x) - функція',
+        'integral.example': 'Приклад: x^2, sin(x), e^x, 1/x',
+        'integral.lower': 'Нижня межа (a):',
+        'integral.upper': 'Верхня межа (b):',
+        'integral.range': 'Визначений інтеграл: від a до b',
+        'integral.precision': 'Точність (розбиття):',
+        'integral.precisionHint': 'Більше значення = точніше, але повільніше',
+        'integral.calc': '∫ Обчислити інтеграл',
         'common.result': 'Результат',
         'status.graph.empty': 'Введіть функцію.',
         'status.graph.range': 'Некоректний діапазон.',
+        'status.graph.invalid': 'Некоректна функція.',
         'status.matrix.invalid': 'Некоректні значення матриці.',
         'status.matrix.rows': 'Рядки повинні мати однакову довжину.',
         'status.matrix.error': 'Помилка матриці.',
@@ -163,6 +197,10 @@ const translations = {
         'status.sum.empty': 'Введіть вираз для n.',
         'status.sum.range': 'Некоректний діапазон.',
         'status.sum.error': 'Помилка суми.',
+        'status.integral.empty': 'Введіть функцію.',
+        'status.integral.range': 'Некоректні межі інтегрування.',
+        'status.integral.input': 'Некоректні параметри.',
+        'status.integral.error': 'Помилка інтеграла.',
     },
     en: {
         title: 'Calculator',
@@ -177,11 +215,17 @@ const translations = {
         'tab.graph': 'Graph',
         'tab.matrix': 'Matrix',
         'tab.derivative': 'Derivative',
-        'tab.sum': 'Sum',
-        'graph.label': 'Function f(x)',
+        'tab.sum': 'Sum (Σ)',
+        'tab.integral': 'Integral (∫)',
+        'graph.label': 'y = f(x)',
+        'graph.range': 'X-axis Range',
+        'graph.rangeHint': 'Enter the start and end of the range',
+        'graph.multiple': 'Multiple Functions',
+        'graph.multipleHint': 'Separated by semicolon (;)',
+        'graph.title': 'Function Graph Plotting',
         'graph.step1': 'Step 1: Enter a function in x.',
-        'graph.step2': 'Step 2: Set range. Example: sin(x) + x^2',
-        'graph.plot': 'Plot',
+        'graph.step2': 'Step 2: Set range. Example: sin(x); cos(x)',
+        'graph.plot': ' Plot',
         'matrix.labelA': 'Matrix A',
         'matrix.labelB': 'Matrix B',
         'matrix.format': 'Format: 1,2;3,4',
@@ -193,12 +237,25 @@ const translations = {
         'deriv.x0': 'x0',
         'deriv.h': 'h',
         'deriv.step': 'Central difference step h',
-        'sum.label': 'Sum expression in n',
-        'sum.example': 'Example: 1/(n^2)',
-        'sum.range': 'Range: start .. end',
+        'deriv.calc': 'Compute derivative',
+        'sum.label': 'f(n) - expression',
+        'sum.example': 'Example: 1/(n^2), 2*n+1, n^3',
+        'sum.range': 'Range: from first to last value',
+        'sum.start': 'Start (n):',
+        'sum.end': 'End (n):',
+        'sum.calc': '∑ Compute Sum',
+        'integral.label': 'f(x) - function',
+        'integral.example': 'Example: x^2, sin(x), e^x, 1/x',
+        'integral.lower': 'Lower bound (a):',
+        'integral.upper': 'Upper bound (b):',
+        'integral.range': 'Definite integral: from a to b',
+        'integral.precision': 'Precision (divisions):',
+        'integral.precisionHint': 'Higher value = more accurate but slower',
+        'integral.calc': '∫ Compute Integral',
         'common.result': 'Result',
         'status.graph.empty': 'Enter a function.',
         'status.graph.range': 'Invalid range.',
+        'status.graph.invalid': 'Invalid function.',
         'status.matrix.invalid': 'Invalid matrix values.',
         'status.matrix.rows': 'Rows must be same length.',
         'status.matrix.error': 'Matrix error.',
@@ -208,6 +265,10 @@ const translations = {
         'status.sum.empty': 'Enter expression in n.',
         'status.sum.range': 'Invalid range.',
         'status.sum.error': 'Sum error.',
+        'status.integral.empty': 'Enter a function.',
+        'status.integral.range': 'Invalid integration bounds.',
+        'status.integral.input': 'Invalid parameters.',
+        'status.integral.error': 'Integral error.',
     },
 };
 
@@ -329,13 +390,55 @@ tabButtons.forEach((button) => {
 
 const normalizeExpression = (expr) => expr.replace(/\^/g, '^');
 
+const preprocessExpression = (expr) => {
+    // Minimal preprocessing - let math.js handle most of it
+    let cleaned = expr.replace(/\s+/g, '');
+    // Only handle basic cases that math.js doesn't
+    cleaned = cleaned.replace(/\)\(/g, ')*(');
+    cleaned = cleaned.replace(/(\d)pi\b/g, '$1*pi');
+    cleaned = cleaned.replace(/pi\b(\d)/g, 'pi*$1');
+    cleaned = cleaned.replace(/(\d)e\b/g, '$1*e');
+    cleaned = cleaned.replace(/\be(\d)/g, 'e*$1');
+    cleaned = cleaned.replace(/(\d)\(/g, '$1*(');
+    cleaned = cleaned.replace(/\)(\d)/g, ')*$1');
+    return cleaned;
+};
+
+const formatNumber = (value) => {
+    if (!Number.isFinite(value)) {
+        return 'Error';
+    }
+    const absValue = Math.abs(value);
+    if (absValue !== 0 && (absValue >= 1e6 || absValue < 1e-6)) {
+        return value.toExponential(2);
+    }
+    return Number(value.toFixed(2)).toString();
+};
+
+const toNumber = (value) => (typeof value === 'number' && Number.isFinite(value) ? value : null);
+
 const plotGraph = () => {
-    const expr = graphInput.value.trim();
-    const minValue = Number(graphMin.value);
-    const maxValue = Number(graphMax.value);
+    // Gather all expressions from both inputs
+    let expressions = [];
+    
+    const mainInput = graphInput?.value?.trim() || '';
+    const multiInput = graphMultiple?.value?.trim() || '';
+    
+    // If multiple input has functions, use it; otherwise use main input
+    const primaryInput = multiInput || mainInput;
+    
+    if (primaryInput) {
+        expressions = primaryInput
+            .split(/[;,]/)
+            .map((item) => item.trim())
+            .filter((item) => item.length > 0);
+    }
+    
+    const minValue = parseFloat(graphMin?.value) || -10;
+    const maxValue = parseFloat(graphMax?.value) || 10;
     graphStatus.textContent = '';
 
-    if (!expr) {
+    if (!expressions.length) {
         graphStatus.textContent = t('status.graph.empty');
         return;
     }
@@ -344,84 +447,198 @@ const plotGraph = () => {
         return;
     }
 
-    const expression = normalizeExpression(expr);
-    const dataPoints = [];
-    const steps = 480; // Збільшена кількість точок для кращої деталізації
-    const threshold = 1e6; // Поріг для фільтрації екстремальних значень біля асимптот
+    const steps = 1024;
+    const threshold = 100;
+    const palette = ['#f59f0b', '#38bdf8', '#a855f7', '#f43f5e', '#22c55e', '#ec4899', '#10b981', '#06b6d4'];
+
+    let compiledExpressions = [];
+    let failedExpressions = [];
     
-    for (let i = 0; i < steps; i += 1) {
-        const x = minValue + (maxValue - minValue) * (i / (steps - 1));
-        try {
-            const y = mathInstance.evaluate(expression, { x });
-            // Фільтруємо нескінченні та екстремально великі значення
-            if (Number.isFinite(y) && Math.abs(y) < threshold) {
-                dataPoints.push({ x, y });
-            } else {
-                // Додаємо null для розриву графіка на асимптотах
+    try {
+        compiledExpressions = expressions.map((expr, idx) => {
+            try {
+                const normalized = normalizeExpression(expr);
+                const preprocessed = preprocessExpression(normalized);
+                console.log(`Expr: "${expr}" -> "${preprocessed}"`);
+                // Test compilation
+                const testCompile = mathInstance.compile(preprocessed);
+                return {
+                    raw: expr,
+                    normalized: preprocessed,
+                    compiled: testCompile,
+                    error: null
+                };
+            } catch (e) {
+                failedExpressions.push(`"${expr}": ${e.message}`);
+                console.error(`Failed to compile "${expr}": ${e.message}`);
+                return null;
+            }
+        }).filter(x => x !== null);
+    } catch (error) {
+        graphStatus.textContent = `Помилка компіляції: ${error.message}`;
+        console.error('Graph compilation error:', error);
+        return;
+    }
+    
+    if (!compiledExpressions.length) {
+        graphStatus.textContent = `Не вдалось скомпілювати функції. ${failedExpressions.join('; ')}`;
+        return;
+    }
+
+    const datasets = compiledExpressions.map((compiledItem, index) => {
+        const dataPoints = [];
+        let lastValidY = null;
+        
+        for (let i = 0; i < steps; i += 1) {
+            const x = minValue + (maxValue - minValue) * (i / (steps - 1));
+            try {
+                const y = compiledItem.compiled.evaluate({ 
+                    x, 
+                    pi: mathInstance.pi, 
+                    e: mathInstance.e,
+                    PI: mathInstance.pi,
+                    E: mathInstance.e 
+                });
+                const numericY = toNumber(y);
+                
+                // Handle discontinuities (like tan at pi/2)
+                if (numericY !== null && Number.isFinite(numericY) && Math.abs(numericY) < threshold) {
+                    dataPoints.push({ x, y: numericY });
+                    lastValidY = numericY;
+                } else if (Math.abs(numericY) >= threshold) {
+                    // Skip outliers for discontinuous functions
+                    dataPoints.push({ x, y: null });
+                } else {
+                    dataPoints.push({ x, y: null });
+                }
+            } catch (e) {
                 dataPoints.push({ x, y: null });
             }
-        } catch {
-            dataPoints.push({ x, y: null });
         }
+
+        const color = palette[index % palette.length];
+        return {
+            label: compiledItem.raw || 'f(x)',
+            data: dataPoints,
+            borderColor: color,
+            backgroundColor: color + '08',
+            borderWidth: 2.5,
+            pointRadius: 0,
+            tension: 0.0,
+            fill: false,
+            spanGaps: false,
+            segment: {
+                borderColor: ctx => {
+                    if (ctx.p0?.skip || ctx.p1?.skip) {
+                        return 'transparent';
+                    }
+                    return color;
+                },
+            },
+        };
+    });
+
+    // Update legend with better styling
+    if (graphLegend) {
+        graphLegend.innerHTML = '';
+        compiledExpressions.forEach((item, index) => {
+            const color = palette[index % palette.length];
+            const legendItem = document.createElement('div');
+            legendItem.style.display = 'flex';
+            legendItem.style.alignItems = 'center';
+            legendItem.style.gap = '10px';
+            legendItem.style.marginBottom = '8px';
+            legendItem.style.padding = '8px';
+            legendItem.style.borderRadius = '6px';
+            legendItem.style.backgroundColor = 'rgba(99, 102, 241, 0.06)';
+            legendItem.style.transition = 'all 0.2s ease';
+            legendItem.style.cursor = 'pointer';
+            
+            const colorDot = document.createElement('div');
+            colorDot.style.width = '14px';
+            colorDot.style.height = '14px';
+            colorDot.style.borderRadius = '3px';
+            colorDot.style.backgroundColor = color;
+            colorDot.style.flexShrink = '0';
+            colorDot.style.boxShadow = `0 0 8px ${color}40`;
+            
+            const label = document.createElement('span');
+            label.textContent = item.raw;
+            label.style.fontSize = '12px';
+            label.style.color = '#cbd5e1';
+            label.style.wordBreak = 'break-word';
+            label.style.fontFamily = 'Space Grotesk, sans-serif';
+            
+            legendItem.appendChild(colorDot);
+            legendItem.appendChild(label);
+            
+            // Hover effect
+            legendItem.addEventListener('mouseenter', () => {
+                legendItem.style.backgroundColor = 'rgba(99, 102, 241, 0.15)';
+            });
+            legendItem.addEventListener('mouseleave', () => {
+                legendItem.style.backgroundColor = 'rgba(99, 102, 241, 0.06)';
+            });
+            
+            graphLegend.appendChild(legendItem);
+        });
     }
 
     if (!chart) {
         chart = new Chart(graphCanvas, {
             type: 'line',
             data: {
-                datasets: [
-                    {
-                        label: 'f(x)',
-                        data: dataPoints,
-                        borderColor: '#f59f0b',
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        spanGaps: false, // Не з'єднувати точки через розриви (асимптоти)
-                        segment: {
-                            borderColor: ctx => {
-                                // Пропускаємо лінії між null значеннями
-                                return ctx.p0.skip || ctx.p1.skip ? 'transparent' : '#f59f0b';
-                            }
-                        }
-                    },
-                ],
+                datasets,
             },
             options: {
                 animation: {
-                    duration: 650,
+                    duration: 500,
                     easing: 'easeOutQuart',
                 },
                 parsing: false,
                 responsive: true,
                 maintainAspectRatio: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
                 scales: {
                     x: {
                         type: 'linear',
                         position: 'center',
+                        min: minValue,
+                        max: maxValue,
                         grid: {
                             color: (context) => {
-                                if (context.tick.value === 0) {
-                                    return 'rgba(255, 255, 255, 0.5)'; // Вісь X яскравіша
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 'rgba(255, 255, 255, 0.4)';
                                 }
-                                return 'rgba(100, 150, 200, 0.15)'; // Сітка видніша
+                                return 'rgba(100, 150, 200, 0.08)';
                             },
                             lineWidth: (context) => {
-                                return context.tick.value === 0 ? 2 : 1;
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 2;
+                                }
+                                return 0.5;
                             },
-                            drawBorder: true,
+                            drawBorder: false,
                             drawTicks: true,
                         },
                         ticks: {
-                            color: '#cbd5f5',
+                            color: '#94a3b8',
                             font: {
-                                size: 11,
+                                size: 10,
+                                weight: '500',
                             },
-                            stepSize: undefined, // Автоматичний крок
+                            stepSize: undefined,
+                            padding: 8,
+                            callback: function(value) {
+                                if (value === 0) return '0';
+                                return value > 0 ? '+' + value.toFixed(0) : value.toFixed(0);
+                            }
                         },
                         border: {
-                            display: true,
-                            color: 'rgba(255, 255, 255, 0.3)',
-                            width: 2,
+                            display: false,
                         },
                     },
                     y: {
@@ -429,54 +646,77 @@ const plotGraph = () => {
                         position: 'center',
                         grid: {
                             color: (context) => {
-                                if (context.tick.value === 0) {
-                                    return 'rgba(255, 255, 255, 0.5)'; // Вісь Y яскравіша
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 'rgba(255, 255, 255, 0.4)';
                                 }
-                                return 'rgba(100, 150, 200, 0.15)'; // Сітка видніша
+                                return 'rgba(100, 150, 200, 0.08)';
                             },
                             lineWidth: (context) => {
-                                return context.tick.value === 0 ? 2 : 1;
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 2;
+                                }
+                                return 0.5;
                             },
-                            drawBorder: true,
+                            drawBorder: false,
                             drawTicks: true,
                         },
                         ticks: {
-                            color: '#cbd5f5',
+                            color: '#94a3b8',
                             font: {
-                                size: 11,
+                                size: 10,
+                                weight: '500',
                             },
-                            stepSize: undefined, // Автоматичний крок
+                            stepSize: undefined,
+                            padding: 8,
+                            callback: function(value) {
+                                if (value === 0) return '0';
+                                return value.toFixed(1);
+                            }
                         },
                         border: {
-                            display: true,
-                            color: 'rgba(255, 255, 255, 0.3)',
-                            width: 2,
+                            display: false,
                         },
                     },
                 },
                 plugins: {
                     legend: {
-                        labels: {
-                            color: '#cbd5f5',
-                            font: {
-                                size: 13,
-                            },
-                        },
+                        display: false,
                     },
                     tooltip: {
                         enabled: true,
-                        mode: 'nearest',
+                        mode: 'index',
                         intersect: false,
-                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        backgroundColor: 'rgba(10, 13, 24, 0.96)',
                         titleColor: '#f8fafc',
-                        bodyColor: '#cbd5e1',
-                        borderColor: '#3b82f6',
-                        borderWidth: 1,
-                        padding: 10,
-                        displayColors: false,
+                        titleFont: {
+                            size: 12,
+                            weight: 'bold',
+                            family: 'Space Grotesk, sans-serif'
+                        },
+                        bodyColor: '#e2e8f0',
+                        bodyFont: {
+                            size: 11,
+                            family: 'Space Grotesk, sans-serif'
+                        },
+                        borderColor: '#5b6bff',
+                        borderWidth: 2,
+                        padding: 12,
+                        displayColors: true,
+                        boxPadding: 8,
+                        usePointStyle: true,
                         callbacks: {
+                            title: function(context) {
+                                if (context.length > 0) {
+                                    return `x = ${context[0].parsed.x.toFixed(2)}`;
+                                }
+                                return '';
+                            },
                             label: function(context) {
-                                return `x: ${context.parsed.x.toFixed(3)}, y: ${context.parsed.y.toFixed(3)}`;
+                                return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}`;
+                            },
+                            afterLabel: function(context) {
+                                // Add empty line between datasets
+                                return '';
                             }
                         }
                     },
@@ -484,9 +724,13 @@ const plotGraph = () => {
             },
         });
     } else {
-        chart.data.datasets[0].data = dataPoints;
+        chart.data.datasets = datasets;
+        chart.options.scales.x.min = minValue;
+        chart.options.scales.x.max = maxValue;
         chart.update();
     }
+    
+    graphStatus.textContent = '';
 };
 
 graphPlot.addEventListener('click', plotGraph);
@@ -524,14 +768,14 @@ const runMatrixOperation = (type) => {
         let result;
         if (type === 'add') {
             result = mathInstance.add(a, b);
-            displayMatrix(matrixResultContainer, formatMatrix(result));
+            displayMatrix(matrixResultContainer, formatMatrix(result), true);
         } else if (type === 'mul') {
             result = mathInstance.multiply(a, b);
-            displayMatrix(matrixResultContainer, formatMatrix(result));
+            displayMatrix(matrixResultContainer, formatMatrix(result), true);
         } else if (type === 'det') {
             const detValue = mathInstance.det(a);
             const detDisplay = document.createElement('div');
-            detDisplay.className = 'result-box';
+            detDisplay.className = 'result-box matrix-det-result';
             detDisplay.textContent = `det(A) = ${detValue.toFixed(4)}`;
             matrixResultContainer.appendChild(detDisplay);
         }
@@ -549,6 +793,8 @@ matrixButtons.forEach((button) => {
 
 const computeDerivative = () => {
     derivStatus.textContent = '';
+    const derivInfo = document.getElementById('deriv-info');
+    if (derivInfo) derivInfo.textContent = '';
     const expr = derivFx.value.trim();
     const x0 = Number(derivX.value);
     const h = Number(derivH.value);
@@ -561,10 +807,17 @@ const computeDerivative = () => {
         return;
     }
     try {
-        const f1 = mathInstance.evaluate(expr, { x: x0 + h });
-        const f2 = mathInstance.evaluate(expr, { x: x0 - h });
+        const expression = preprocessExpression(normalizeExpression(expr));
+        const compiled = mathInstance.compile(expression);
+        const f1 = compiled.evaluate({ x: x0 + h, pi: mathInstance.pi, e: mathInstance.e });
+        const f2 = compiled.evaluate({ x: x0 - h, pi: mathInstance.pi, e: mathInstance.e });
         const derivative = (f1 - f2) / (2 * h);
-        derivResult.textContent = String(derivative);
+        const numericValue = toNumber(derivative);
+        if (numericValue === null) {
+            throw new Error('derivative.invalid');
+        }
+        derivResult.textContent = formatNumber(numericValue);
+        if (derivInfo) derivInfo.textContent = `f'(${x0}) = ${formatNumber(numericValue)}`;
     } catch {
         derivStatus.textContent = t('status.deriv.error');
     }
@@ -574,6 +827,7 @@ derivCalc.addEventListener('click', computeDerivative);
 
 const computeSum = () => {
     sumStatus.textContent = '';
+    sumInfo.textContent = '';
     const expr = sumExpr.value.trim();
     const start = Number(sumStart.value);
     const end = Number(sumEnd.value);
@@ -581,22 +835,92 @@ const computeSum = () => {
         sumStatus.textContent = t('status.sum.empty');
         return;
     }
-    if (!Number.isFinite(start) || !Number.isFinite(end) || start > end) {
+    if (!Number.isFinite(start) || !Number.isFinite(end)) {
         sumStatus.textContent = t('status.sum.range');
         return;
     }
     try {
-        let total = 0;
-        for (let n = Math.floor(start); n <= Math.floor(end); n += 1) {
-            total += mathInstance.evaluate(expr, { n });
+        const startInt = Math.ceil(start);
+        const endInt = Math.floor(end);
+        if (startInt > endInt) {
+            sumStatus.textContent = t('status.sum.range');
+            return;
         }
-        sumResult.textContent = String(total);
+        const expression = preprocessExpression(normalizeExpression(expr));
+        const compiled = mathInstance.compile(expression);
+        let total = 0;
+        for (let n = startInt; n <= endInt; n += 1) {
+            total += compiled.evaluate({ n, pi: mathInstance.pi, e: mathInstance.e });
+        }
+        sumResult.textContent = formatNumber(total);
+        sumInfo.textContent = `∑(n=${startInt},${endInt}) ${expr}`;
     } catch {
         sumStatus.textContent = t('status.sum.error');
     }
 };
 
 sumCalc.addEventListener('click', computeSum);
+
+const computeIntegral = () => {
+    integralStatus.textContent = '';
+    integralInfo.textContent = '';
+    const expr = integralExpr.value.trim();
+    const lower = Number(integralLower.value);
+    const upper = Number(integralUpper.value);
+    const steps = Number(integralSteps.value) || 1000;
+    
+    if (!expr) {
+        integralStatus.textContent = t('status.integral.empty');
+        return;
+    }
+    if (!Number.isFinite(lower) || !Number.isFinite(upper)) {
+        integralStatus.textContent = t('status.integral.range');
+        return;
+    }
+    if (lower >= upper) {
+        integralStatus.textContent = t('status.integral.range');
+        return;
+    }
+    if (!Number.isFinite(steps) || steps < 10 || steps > 10000) {
+        integralStatus.textContent = t('status.integral.input');
+        return;
+    }
+    
+    try {
+        const expression = preprocessExpression(normalizeExpression(expr));
+        const compiled = mathInstance.compile(expression);
+        
+        // Simpson's rule for numerical integration
+        const n = Math.floor(steps / 2) * 2; // Make it even
+        const h = (upper - lower) / n;
+        let sum = compiled.evaluate({ x: lower, pi: mathInstance.pi, e: mathInstance.e });
+        sum += compiled.evaluate({ x: upper, pi: mathInstance.pi, e: mathInstance.e });
+        
+        for (let i = 1; i < n; i += 2) {
+            const x = lower + i * h;
+            sum += 4 * compiled.evaluate({ x, pi: mathInstance.pi, e: mathInstance.e });
+        }
+        for (let i = 2; i < n; i += 2) {
+            const x = lower + i * h;
+            sum += 2 * compiled.evaluate({ x, pi: mathInstance.pi, e: mathInstance.e });
+        }
+        
+        const result = (sum * h) / 3;
+        const numericValue = toNumber(result);
+        
+        if (numericValue === null || !Number.isFinite(numericValue)) {
+            throw new Error('integral.invalid');
+        }
+        
+        integralResult.textContent = formatNumber(numericValue);
+        integralInfo.textContent = `∫[${lower.toFixed(2)}, ${upper.toFixed(2)}] ${expr} dx`;
+    } catch (error) {
+        integralStatus.textContent = t('status.integral.error');
+        console.error('Integral error:', error);
+    }
+};
+
+integralCalc.addEventListener('click', computeIntegral);
 
 plotGraph();
 
