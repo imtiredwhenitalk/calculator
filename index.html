@@ -86,27 +86,56 @@
                             <button class="tab-btn is-active" data-tab="graph" role="tab" data-i18n="tab.graph">Графік</button>
                             <button class="tab-btn" data-tab="matrix" role="tab" data-i18n="tab.matrix">Матриці</button>
                             <button class="tab-btn" data-tab="derivative" role="tab" data-i18n="tab.derivative">Похідна</button>
-                            <button class="tab-btn" data-tab="sum" role="tab" data-i18n="tab.sum">Сума</button>
+                            <button class="tab-btn" data-tab="sum" role="tab" data-i18n="tab.sum">Сума (Σ)</button>
+                            <button class="tab-btn" data-tab="integral" role="tab" data-i18n="tab.integral">Інтеграл (∫)</button>
                         </div>
                     </header>
 
                     <div class="panel-stack">
                         <div class="tab-panel is-active" id="panel-graph" role="tabpanel">
-                            <div class="panel-grid simple">
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="graph.label">Функція f(x)</label>
-                                    <input id="graph-input" class="field" value="sin(x)" />
-                                    <p class="helper" data-i18n="graph.step1">Крок 1: Введіть функцію через x.</p>
-                                    <div class="range-row">
-                                        <input id="graph-min" class="field small" value="0" />
-                                        <input id="graph-max" class="field small" value="10" />
+                            <div class="graph-unified-section">
+                                <div class="graph-controls-panel">
+                                    <div class="graph-header">
+                                        <h3 class="graph-title" data-i18n="graph.title">Графік функції</h3>
+                                    </div>
+                                    
+                                    <div class="graph-input-item">
+                                        <label class="panel-label" data-i18n="graph.label">y = f(x)</label>
+                                        <div class="input-with-example">
+                                            <input id="graph-input" class="field" value="sin(x)" placeholder="Введіть функцію" />
+                                            <span class="input-hint">Приклади: sin(x); cos(x); x^2</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="graph-input-item">
+                                        <label class="panel-label" data-i18n="graph.range">Діапазон осі X</label>
+                                        <div class="range-inputs">
+                                            <div class="range-input-group">
+                                                <label class="range-label">Від:</label>
+                                                <input id="graph-min" class="field" value="-10" />
+                                            </div>
+                                            <div class="range-input-group">
+                                                <label class="range-label">До:</label>
+                                                <input id="graph-max" class="field" value="10" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="graph-input-item">
+                                        <label class="panel-label" data-i18n="graph.multiple">Декілька функцій</label>
+                                        <input id="graph-multiple" class="field" placeholder="sin(x); cos(x); x/2" />
+                                        <span class="input-hint" data-i18n="graph.multipleHint">Через ; (крапку з комою)</span>
+                                    </div>
+
+                                    <div class="form-actions">
                                         <button class="btn btn-op" id="graph-plot" data-i18n="graph.plot">Побудувати</button>
                                     </div>
-                                    <p class="helper" data-i18n="graph.step2">Крок 2: Задайте діапазон. Приклад: sin(x) + x^2</p>
                                     <p class="status" id="graph-status"></p>
+                                    <div class="graph-legend" id="graph-legend"></div>
                                 </div>
-                                <div class="panel-block">
-                                    <canvas id="graph-canvas" height="260"></canvas>
+
+                                <div class="graph-canvas-panel">
+                                    <canvas id="graph-canvas" height="420"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -156,45 +185,146 @@
                         </div>
 
                         <div class="tab-panel" id="panel-derivative" role="tabpanel">
-                            <div class="panel-grid simple">
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="deriv.label">f(x)</label>
-                                    <input id="deriv-fx" class="field" value="x^2 + 2*x" />
-                                    <p class="helper" data-i18n="deriv.example">Приклад: x^2 + 2*x</p>
+                            <div class="math-section derivative-section">
+                                <div class="math-header">
+                                    <h3 class="math-title">Обчислення Похідної</h3>
+                                    <div class="math-formula">f'(x)</div>
                                 </div>
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="deriv.x0">x0</label>
-                                    <input id="deriv-x" class="field" value="2" />
-                                    <label class="panel-label mt-3" data-i18n="deriv.h">h</label>
-                                    <input id="deriv-h" class="field" value="0.00001" />
-                                    <p class="helper" data-i18n="deriv.step">Крок h для центральної різниці</p>
-                                    <button class="btn btn-op mt-4" id="deriv-calc" data-i18n="common.result">Результат</button>
+
+                                <div class="math-input-section">
+                                    <div class="panel-block">
+                                        <label class="panel-label" data-i18n="deriv.label">f(x)</label>
+                                        <input id="deriv-fx" class="field" value="x^2 + 2*x" placeholder="x^2 + 2*x" />
+                                        <p class="helper" data-i18n="deriv.example">Приклад: x^2 + 2*x</p>
+                                    </div>
+                                    <div class="panel-block">
+                                        <div class="form-grid">
+                                            <div>
+                                                <label class="panel-label" data-i18n="deriv.x0">x₀:</label>
+                                                <input id="deriv-x" class="field" value="2" placeholder="2" />
+                                            </div>
+                                            <div>
+                                                <label class="panel-label" data-i18n="deriv.h">h (крок):</label>
+                                                <input id="deriv-h" class="field" value="0.00001" placeholder="0.00001" />
+                                            </div>
+                                        </div>
+                                        <p class="helper" data-i18n="deriv.step">Крок h для центральної різниці</p>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="deriv-calc" data-i18n="deriv.calc">f'(x₀) Обчислити похідну</button>
+                                    </div>
                                     <p class="status" id="deriv-status"></p>
                                 </div>
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="common.result">Результат</label>
-                                    <div class="result-box" id="deriv-result">---</div>
+
+                                <div class="result-section">
+                                    <label class="panel-label">f'(x₀) =</label>
+                                    <div class="result-box result-large" id="deriv-result">---</div>
+                                    <div class="result-info" id="deriv-info"></div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="tab-panel" id="panel-sum" role="tabpanel">
-                            <div class="panel-grid simple">
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="sum.label">Сума виразу за n</label>
-                                    <input id="sum-expr" class="field" value="1/(n^2)" />
-                                    <p class="helper" data-i18n="sum.example">Приклад: 1/(n^2)</p>
-                                    <div class="range-row">
-                                        <input id="sum-start" class="field small" value="1" />
-                                        <input id="sum-end" class="field small" value="5" />
-                                        <button class="btn btn-op" id="sum-calc" data-i18n="common.result">Результат</button>
+                            <div class="math-section sum-section">
+                                <div class="math-header">
+                                    <h3 class="math-title">Обчислення Суми</h3>
+                                    <div class="math-formula">∑ f(n)</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-block">
+                                        <label class="panel-label" data-i18n="sum.label">f(n) - вираз</label>
+                                        <div class="input-with-formula">
+                                            <span class="formula-prefix">f(n) =</span>
+                                            <input id="sum-expr" class="field" value="1/(n^2)" placeholder="Введіть вираз через n" />
+                                        </div>
+                                        <p class="helper" data-i18n="sum.example">Приклад: 1/(n^2), 2*n+1, n^3</p>
                                     </div>
-                                    <p class="helper" data-i18n="sum.range">Діапазон: від .. до</p>
+
+                                    <div class="sum-range-block">
+                                        <div class="range-grid">
+                                            <div class="range-item">
+                                                <label class="panel-label" data-i18n="sum.start">Початок (n):</label>
+                                                <input id="sum-start" class="field" value="1" placeholder="1" />
+                                                <span class="range-symbol">↓</span>
+                                            </div>
+                                            <div class="range-item">
+                                                <label class="panel-label" data-i18n="sum.end">Кінець (n):</label>
+                                                <input id="sum-end" class="field" value="10" placeholder="100" />
+                                                <span class="range-symbol">↑</span>
+                                            </div>
+                                        </div>
+                                        <p class="helper" data-i18n="sum.range">Діапазон: від першого до останнього значення</p>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="sum-calc" data-i18n="sum.calc">∑ Обчислити суму</button>
+                                    </div>
                                     <p class="status" id="sum-status"></p>
                                 </div>
-                                <div class="panel-block">
-                                    <label class="panel-label" data-i18n="common.result">Результат</label>
-                                    <div class="result-box" id="sum-result">---</div>
+
+                                <div class="result-section">
+                                    <label class="panel-label">Результат:</label>
+                                    <div class="result-box result-large" id="sum-result">---</div>
+                                    <div class="result-info" id="sum-info"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="panel-integral" role="tabpanel">
+                            <div class="math-section integral-section">
+                                <div class="math-header">
+                                    <h3 class="math-title">Обчислення Інтеграла</h3>
+                                    <div class="math-formula">∫ f(x) dx</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-block">
+                                        <label class="panel-label" data-i18n="integral.label">f(x) - функція</label>
+                                        <div class="input-with-formula">
+                                            <span class="formula-prefix">∫</span>
+                                            <input id="integral-expr" class="field" value="x^2" placeholder="Введіть функцію через x" />
+                                            <span class="formula-suffix">dx</span>
+                                        </div>
+                                        <p class="helper" data-i18n="integral.example">Приклад: x^2, sin(x), e^x, 1/x</p>
+                                    </div>
+
+                                    <div class="integral-range-block">
+                                        <div class="range-grid">
+                                            <div class="range-item">
+                                                <label class="panel-label" data-i18n="integral.lower">Нижня межа (a):</label>
+                                                <input id="integral-lower" class="field" value="0" placeholder="0" />
+                                                <span class="range-symbol">a</span>
+                                            </div>
+                                            <div class="range-item">
+                                                <label class="panel-label" data-i18n="integral.upper">Верхня межа (b):</label>
+                                                <input id="integral-upper" class="field" value="2" placeholder="2" />
+                                                <span class="range-symbol">b</span>
+                                            </div>
+                                        </div>
+                                        <p class="helper" data-i18n="integral.range">Визначений інтеграл: від a до b</p>
+                                    </div>
+
+                                    <div class="integral-precision-block">
+                                        <label class="panel-label" data-i18n="integral.precision">Точність (розбиття):</label>
+                                        <div class="precision-inputs">
+                                            <input id="integral-steps" class="field field-small" value="1000" type="number" min="10" max="10000" />
+                                            <span class="precision-hint">точок для обчислення</span>
+                                        </div>
+                                        <p class="helper" data-i18n="integral.precisionHint">Більше значення = точніше, але повільніше</p>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="integral-calc" data-i18n="integral.calc">∫ Обчислити інтеграл</button>
+                                    </div>
+                                    <p class="status" id="integral-status"></p>
+                                </div>
+
+                                <div class="result-section">
+                                    <label class="panel-label">Результат:</label>
+                                    <div class="result-box result-large" id="integral-result">---</div>
+                                    <div class="result-info" id="integral-info"></div>
                                 </div>
                             </div>
                         </div>
