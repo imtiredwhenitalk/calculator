@@ -8,6 +8,12 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body class="app-bg text-slate-100">
+        <!-- Прихований select для керування мовою (керується через налаштування) -->
+        <select id="lang-select" style="display: none;" aria-hidden="true">
+            <option value="uk">UA</option>
+            <option value="en">EN</option>
+        </select>
+        
         <main class="min-h-screen px-4 py-8">
             <div class="max-w-5xl mx-auto flex flex-col gap-6">
                 <header class="panel panel-compact" aria-label="Mode selector">
@@ -15,13 +21,9 @@
                         <div class="view-tabs" role="tablist">
                             <button class="view-btn is-active" data-view="calculator" role="tab" data-i18n="view.calculator">Калькулятор</button>
                             <button class="view-btn" data-view="mathlab" role="tab" data-i18n="view.mathlab">Матем. лабораторія</button>
-                        </div>
-                        <div class="lang-picker">
-                            <label class="sr-only" for="lang-select">Language</label>
-                            <select id="lang-select" class="lang-select" aria-label="Language">
-                                <option value="uk">UA</option>
-                                <option value="en">EN</option>
-                            </select>
+                            <button class="view-btn" data-view="physiclab" role="tab" data-i18n="view.physiclab">Фізика лабораторія</button>
+                            <button class="view-btn" data-view="settings" role="tab" data-i18n="view.settings">Налаштування</button>
+                            <button class="view-btn" data-view="about" role="tab" data-i18n="view.about">Про додаток</button>
                         </div>
                     </div>
                 </header>
@@ -59,18 +61,19 @@
                         <button class="btn" data-value="4">4</button>
                         <button class="btn" data-value="5">5</button>
                         <button class="btn" data-value="6">6</button>
-                        <button class="btn btn-op" data-value="+">+</button>
+                        <button class="btn btn-op" data-value="-">-</button>
 
                         <button class="btn" data-value="1">1</button>
                         <button class="btn" data-value="2">2</button>
                         <button class="btn" data-value="3">3</button>
-                        <button class="btn btn-sci" data-value="^" title="Power">x^y</button>
+                        <button class="btn btn-op" data-value="+">+</button>
 
                         <button class="btn btn-wide" data-value="0">0</button>
                         <button class="btn" data-value=".">.</button>
+                        <button class="btn btn-sci" data-value="^" title="Power">x^y</button>
                         <button class="btn btn-sci" data-value="pi" title="Pi">pi</button>
-                        <button class="btn btn-sci btn-wide" data-value="e" title="Euler">e</button>
 
+                        <button class="btn btn-sci" data-value="e" title="Euler">e</button>
                         <button class="btn btn-eq" data-action="equals">=</button>
                     </div>
                 </section>
@@ -327,6 +330,381 @@
                                     <div class="result-info" id="integral-info"></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Секція Фізика Лабораторія -->
+                <section class="panel view-panel" data-view-panel="physiclab" aria-label="Physics Lab">
+                    <header class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div>
+                            <p class="text-xs text-slate-400" data-i18n="physiclab.subtitle">Фізика лабораторія</p>
+                            <h2 class="font-display text-2xl" data-i18n="physiclab.title">Формули, перетворення, обчислення</h2>
+                            <p class="helper" data-i18n="physiclab.helper">Оберіть розділ фізики для обчислень.</p>
+                        </div>
+                        <div class="tab-row" role="tablist">
+                            <button class="tab-btn is-active" data-tab="kinematics" role="tab" data-i18n="tab.kinematics">Кінематика</button>
+                            <button class="tab-btn" data-tab="dynamics" role="tab" data-i18n="tab.dynamics">Динаміка</button>
+                            <button class="tab-btn" data-tab="energy" role="tab" data-i18n="tab.energy">Енергія</button>
+                            <button class="tab-btn" data-tab="electricity" role="tab" data-i18n="tab.electricity">Електрика</button>
+                        </div>
+                    </header>
+
+                    <div class="panel-stack">
+                        <!-- Кінематика -->
+                        <div class="tab-panel is-active" id="panel-kinematics" role="tabpanel">
+                            <div class="math-section">
+                                <div class="math-header">
+                                    <h3 class="math-title" data-i18n="physic.kinematics.title">Рівноприскорений рух</h3>
+                                    <div class="math-formula">v = v₀ + at</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-grid">
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.v0">Початкова швидкість v₀ (м/с):</label>
+                                            <input id="phys-v0" class="field" value="0" placeholder="0" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.a">Прискорення a (м/с²):</label>
+                                            <input id="phys-a" class="field" value="9.8" placeholder="9.8" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.t">Час t (с):</label>
+                                            <input id="phys-t" class="field" value="5" placeholder="5" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="phys-calc-v" data-i18n="physic.calc">Обчислити швидкість v</button>
+                                        <button class="btn btn-func" id="phys-calc-s" data-i18n="physic.calc.s">Обчислити відстань s</button>
+                                    </div>
+                                    <p class="status" id="phys-status"></p>
+                                </div>
+
+                                <div class="result-section">
+                                    <label class="panel-label" data-i18n="physic.result">Результат:</label>
+                                    <div class="result-box result-large" id="phys-result">---</div>
+                                    <div class="result-info" id="phys-info"></div>
+                                </div>
+
+                                <div class="formula-reference">
+                                    <h4 class="text-sm font-semibold mb-2" data-i18n="physic.formulas">Формули:</h4>
+                                    <ul class="formula-list">
+                                        <li><strong>v = v₀ + at</strong> — швидкість</li>
+                                        <li><strong>s = v₀t + ½at²</strong> — переміщення</li>
+                                        <li><strong>v² = v₀² + 2as</strong> — без часу</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Динаміка -->
+                        <div class="tab-panel" id="panel-dynamics" role="tabpanel">
+                            <div class="math-section">
+                                <div class="math-header">
+                                    <h3 class="math-title" data-i18n="physic.dynamics.title">Другий закон Ньютона</h3>
+                                    <div class="math-formula">F = ma</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-grid">
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.m">Маса m (кг):</label>
+                                            <input id="phys-m" class="field" value="10" placeholder="10" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.a.dyn">Прискорення a (м/с²):</label>
+                                            <input id="phys-a-dyn" class="field" value="2" placeholder="2" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="phys-calc-f" data-i18n="physic.calc.f">Обчислити силу F</button>
+                                    </div>
+                                    <p class="status" id="phys-dyn-status"></p>
+                                </div>
+
+                                <div class="result-section">
+                                    <label class="panel-label" data-i18n="physic.result">Результат:</label>
+                                    <div class="result-box result-large" id="phys-dyn-result">---</div>
+                                    <div class="result-info" id="phys-dyn-info"></div>
+                                </div>
+
+                                <div class="formula-reference">
+                                    <h4 class="text-sm font-semibold mb-2" data-i18n="physic.formulas">Формули:</h4>
+                                    <ul class="formula-list">
+                                        <li><strong>F = ma</strong> — сила (Ньютон)</li>
+                                        <li><strong>P = mg</strong> — вага</li>
+                                        <li><strong>F<sub>тр</sub> = μN</strong> — сила тертя</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Енергія -->
+                        <div class="tab-panel" id="panel-energy" role="tabpanel">
+                            <div class="math-section">
+                                <div class="math-header">
+                                    <h3 class="math-title" data-i18n="physic.energy.title">Кінетична та потенційна енергія</h3>
+                                    <div class="math-formula">E<sub>k</sub> = ½mv²</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-grid">
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.m.ener">Маса m (кг):</label>
+                                            <input id="phys-m-ener" class="field" value="5" placeholder="5" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.v.ener">Швидкість v (м/с):</label>
+                                            <input id="phys-v-ener" class="field" value="10" placeholder="10" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.h">Висота h (м):</label>
+                                            <input id="phys-h" class="field" value="20" placeholder="20" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="phys-calc-ek" data-i18n="physic.calc.ek">Кінетична E<sub>k</sub></button>
+                                        <button class="btn btn-func" id="phys-calc-ep" data-i18n="physic.calc.ep">Потенційна E<sub>p</sub></button>
+                                    </div>
+                                    <p class="status" id="phys-ener-status"></p>
+                                </div>
+
+                                <div class="result-section">
+                                    <label class="panel-label" data-i18n="physic.result">Результат:</label>
+                                    <div class="result-box result-large" id="phys-ener-result">---</div>
+                                    <div class="result-info" id="phys-ener-info"></div>
+                                </div>
+
+                                <div class="formula-reference">
+                                    <h4 class="text-sm font-semibold mb-2" data-i18n="physic.formulas">Формули:</h4>
+                                    <ul class="formula-list">
+                                        <li><strong>E<sub>k</sub> = ½mv²</strong> — кінетична енергія (Дж)</li>
+                                        <li><strong>E<sub>p</sub> = mgh</strong> — потенційна енергія (Дж)</li>
+                                        <li><strong>g = 9.8 м/с²</strong> — прискорення вільного падіння</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Електрика -->
+                        <div class="tab-panel" id="panel-electricity" role="tabpanel">
+                            <div class="math-section">
+                                <div class="math-header">
+                                    <h3 class="math-title" data-i18n="physic.electricity.title">Закон Ома та потужність</h3>
+                                    <div class="math-formula">I = U/R</div>
+                                </div>
+
+                                <div class="math-input-section">
+                                    <div class="panel-grid">
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.u">Напруга U (В):</label>
+                                            <input id="phys-u" class="field" value="220" placeholder="220" />
+                                        </div>
+                                        <div class="panel-block">
+                                            <label class="panel-label" data-i18n="physic.r">Опір R (Ом):</label>
+                                            <input id="phys-r" class="field" value="100" placeholder="100" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button class="btn btn-op" id="phys-calc-i" data-i18n="physic.calc.i">Обчислити струм I</button>
+                                        <button class="btn btn-func" id="phys-calc-p" data-i18n="physic.calc.p">Обчислити потужність P</button>
+                                    </div>
+                                    <p class="status" id="phys-elec-status"></p>
+                                </div>
+
+                                <div class="result-section">
+                                    <label class="panel-label" data-i18n="physic.result">Результат:</label>
+                                    <div class="result-box result-large" id="phys-elec-result">---</div>
+                                    <div class="result-info" id="phys-elec-info"></div>
+                                </div>
+
+                                <div class="formula-reference">
+                                    <h4 class="text-sm font-semibold mb-2" data-i18n="physic.formulas">Формули:</h4>
+                                    <ul class="formula-list">
+                                        <li><strong>I = U/R</strong> — сила струму (А)</li>
+                                        <li><strong>P = UI</strong> — потужність (Вт)</li>
+                                        <li><strong>P = I²R = U²/R</strong> — альтернативні формули</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Секція Налаштування -->
+                <section class="panel view-panel" data-view-panel="settings" aria-label="Settings">
+                    <header class="mb-4">
+                        <div>
+                            <p class="text-xs text-slate-400" data-i18n="settings.subtitle">Налаштування</p>
+                            <h2 class="font-display text-2xl" data-i18n="settings.title">Персоналізація</h2>
+                            <p class="helper" data-i18n="settings.helper">Налаштуйте додаток під себе.</p>
+                        </div>
+                    </header>
+
+                    <div class="settings-grid">
+                        <!-- Зміна теми -->
+                        <div class="setting-card">
+                            <div class="setting-header">
+                                <h3 class="setting-title" data-i18n="settings.theme.title">Тема оформлення</h3>
+                                <p class="setting-description" data-i18n="settings.theme.desc">Оберіть колірну схему додатка</p>
+                            </div>
+                            <div class="theme-picker">
+                                <button class="theme-option is-active" data-theme="dark">
+                                    <div class="theme-preview theme-dark"></div>
+                                    <span data-i18n="settings.theme.dark">Темна</span>
+                                </button>
+                                <button class="theme-option" data-theme="light">
+                                    <div class="theme-preview theme-light"></div>
+                                    <span data-i18n="settings.theme.light">Світла</span>
+                                </button>
+                                <button class="theme-option" data-theme="purple">
+                                    <div class="theme-preview theme-purple"></div>
+                                    <span data-i18n="settings.theme.purple">Фіолетова</span>
+                                </button>
+                                <button class="theme-option" data-theme="blue">
+                                    <div class="theme-preview theme-blue"></div>
+                                    <span data-i18n="settings.theme.blue">Синя</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Зміна мови -->
+                        <div class="setting-card">
+                            <div class="setting-header">
+                                <h3 class="setting-title" data-i18n="settings.lang.title">Мова інтерфейсу</h3>
+                                <p class="setting-description" data-i18n="settings.lang.desc">Виберіть мову додатка</p>
+                            </div>
+                            <div class="lang-options">
+                                <label class="lang-option">
+                                    <input type="radio" name="language" value="uk" checked />
+                                    <div class="lang-card">
+                                        <span class="lang-flag">UA</span>
+                                        <span class="lang-name" data-i18n="settings.lang.uk">Українська</span>
+                                    </div>
+                                </label>
+                                <label class="lang-option">
+                                    <input type="radio" name="language" value="en" />
+                                    <div class="lang-card">
+                                        <span class="lang-flag">EN</span>
+                                        <span class="lang-name" data-i18n="settings.lang.en">English</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Додаткові налаштування -->
+                        <div class="setting-card">
+                            <div class="setting-header">
+                                <h3 class="setting-title" data-i18n="settings.misc.title">Інше</h3>
+                                <p class="setting-description" data-i18n="settings.misc.desc">Додаткові параметри</p>
+                            </div>
+                            <div class="misc-settings">
+                                <label class="toggle-setting">
+                                    <span data-i18n="settings.misc.sound">Звукові ефекти</span>
+                                    <input type="checkbox" id="sound-toggle" />
+                                </label>
+                                <label class="toggle-setting">
+                                    <span data-i18n="settings.misc.animations">Анімації</span>
+                                    <input type="checkbox" id="animations-toggle" checked />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Секція Про додаток -->
+                <section class="panel view-panel" data-view-panel="about" aria-label="About">
+                    <header class="mb-4">
+                        <div>
+                            <p class="text-xs text-slate-400" data-i18n="about.subtitle">Про додаток</p>
+                            <h2 class="font-display text-2xl" data-i18n="about.title">Інформація</h2>
+                        </div>
+                    </header>
+
+                    <div class="about-content">
+                        <!-- Про розробника -->
+                        <div class="about-card">
+                            <h3 class="about-heading" data-i18n="about.developer.title"> Розробник</h3>
+                            <div class="about-text">
+                                <p data-i18n="about.developer.name">Створено: <strong>imtiredwhenitalk</strong></p>
+                                <p data-i18n="about.developer.desc">Студент, який захоплюється програмуванням та математикою. Цей калькулятор створений як навчальний проєкт для демонстрації можливостей веб-технологій та математичних обчислень.</p>
+                            </div>
+                        </div>
+
+                        <!-- Використані технології -->
+                        <div class="about-card">
+                            <h3 class="about-heading" data-i18n="about.tech.title"> Технології</h3>
+                            <div class="tech-grid">
+                                <div class="tech-item">
+                                    <div class="tech-icon"></div>
+                                    <div>
+                                        <strong>HTML5</strong>
+                                        <p class="tech-desc">Структура та розмітка</p>
+                                    </div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon"></div>
+                                    <div>
+                                        <strong>CSS3 + Tailwind</strong>
+                                        <p class="tech-desc">Стилізація та дизайн</p>
+                                    </div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon"></div>
+                                    <div>
+                                        <strong>JavaScript (ES6+)</strong>
+                                        <p class="tech-desc">Логіка та інтерактивність</p>
+                                    </div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon"></div>
+                                    <div>
+                                        <strong>Math.js</strong>
+                                        <p class="tech-desc">Математичні обчислення</p>
+                                    </div>
+                                </div>
+                                <div class="tech-item">
+                                    <div class="tech-icon"></div>
+                                    <div>
+                                        <strong>Chart.js</strong>
+                                        <p class="tech-desc">Побудова графіків</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Можливості -->
+                        <div class="about-card">
+                            <h3 class="about-heading" data-i18n="about.features.title"> Можливості</h3>
+                            <ul class="feature-list">
+                                <li data-i18n="about.features.calc">Науковий калькулятор з тригонометричними функціями</li>
+                                <li data-i18n="about.features.graphs">Побудова графіків функцій</li>
+                                <li data-i18n="about.features.matrix">Операції з матрицями</li>
+                                <li data-i18n="about.features.derivative">Обчислення похідних та інтегралів</li>
+                                <li data-i18n="about.features.physics">Фізичні формули та перетворення</li>
+                                <li data-i18n="about.features.multilang">Підтримка двох мов (UA/EN)</li>
+                                <li data-i18n="about.features.themes">Кілька тем оформлення</li>
+                            </ul>
+                        </div>
+
+                        <!-- Контакти -->
+                        <div class="about-card">
+                            <h3 class="about-heading" data-i18n="about.contact.title"> Контакти</h3>
+                            <div class="about-text">
+                                <p data-i18n="about.contact.desc">Якщо ви знайшли помилку або маєте пропозиції щодо покращення, будь ласка, зв'яжіться зі мною:</p>
+                                <p class="contact-info">GitHub: <a href="https://github.com/imtiredwhenitalk" target="_blank" class="link">@imtiredwhenitalk</a></p>
+                            </div>
+                        </div>
+
+                        <!-- Ліцензія -->
+                        <div class="about-footer">
+                            <p data-i18n="about.license">© 2026 imtiredwhenitalk. Навчальний проєкт.</p>
+                            <p class="version">v1.0.0</p>
                         </div>
                     </div>
                 </section>
