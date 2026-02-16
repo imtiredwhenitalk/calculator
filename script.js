@@ -201,6 +201,76 @@ const translations = {
         'status.integral.range': 'Некоректні межі інтегрування.',
         'status.integral.input': 'Некоректні параметри.',
         'status.integral.error': 'Помилка інтеграла.',
+        // Фізика
+        'view.physiclab': 'Фізика лабораторія',
+        'view.settings': 'Налаштування',
+        'view.about': 'Про додаток',
+        'physiclab.subtitle': 'Фізика лабораторія',
+        'physiclab.title': 'Формули, перетворення, обчислення',
+        'physiclab.helper': 'Оберіть розділ фізики для обчислень.',
+        'tab.kinematics': 'Кінематика',
+        'tab.dynamics': 'Динаміка',
+        'tab.energy': 'Енергія',
+        'tab.electricity': 'Електрика',
+        'physic.kinematics.title': 'Рівноприскорений рух',
+        'physic.dynamics.title': 'Другий закон Ньютона',
+        'physic.energy.title': 'Кінетична та потенційна енергія',
+        'physic.electricity.title': 'Закон Ома та потужність',
+        'physic.v0': 'Початкова швидкість v₀ (м/с):',
+        'physic.a': 'Прискорення a (м/с²):',
+        'physic.t': 'Час t (с):',
+        'physic.m': 'Маса m (кг):',
+        'physic.a.dyn': 'Прискорення a (м/с²):',
+        'physic.m.ener': 'Маса m (кг):',
+        'physic.v.ener': 'Швидкість v (м/с):',
+        'physic.h': 'Висота h (м):',
+        'physic.u': 'Напруга U (В):',
+        'physic.r': 'Опір R (Ом):',
+        'physic.calc': 'Обчислити швидкість v',
+        'physic.calc.s': 'Обчислити відстань s',
+        'physic.calc.f': 'Обчислити силу F',
+        'physic.calc.ek': 'Кінетична Eₖ',
+        'physic.calc.ep': 'Потенційна Eₚ',
+        'physic.calc.i': 'Обчислити струм I',
+        'physic.calc.p': 'Обчислити потужність P',
+        'physic.result': 'Результат:',
+        'physic.formulas': 'Формули:',
+        // Налаштування
+        'settings.subtitle': 'Налаштування',
+        'settings.title': 'Персоналізація',
+        'settings.helper': 'Налаштуйте додаток під себе.',
+        'settings.theme.title': 'Тема оформлення',
+        'settings.theme.desc': 'Оберіть колірну схему додатка',
+        'settings.theme.dark': 'Темна',
+        'settings.theme.light': 'Світла',
+        'settings.theme.purple': 'Фіолетова',
+        'settings.theme.blue': 'Синя',
+        'settings.lang.title': 'Мова інтерфейсу',
+        'settings.lang.desc': 'Виберіть мову додатка',
+        'settings.lang.uk': 'Українська',
+        'settings.lang.en': 'English',
+        'settings.misc.title': 'Інше',
+        'settings.misc.desc': 'Додаткові параметри',
+        'settings.misc.sound': 'Звукові ефекти',
+        'settings.misc.animations': 'Анімації',
+        // Про додаток
+        'about.subtitle': 'Про додаток',
+        'about.title': 'Інформація',
+        'about.developer.title': ' Розробник',
+        'about.developer.name': 'Створено: imtiredwhenitalk',
+        'about.developer.desc': 'Студент, який захоплюється програмуванням та математикою. Цей калькулятор створений як навчальний проєкт для демонстрації можливостей веб-технологій та математичних обчислень.',
+        'about.tech.title': ' Технології',
+        'about.features.title': ' Можливості',
+        'about.features.calc': 'Науковий калькулятор з тригонометричними функціями',
+        'about.features.graphs': 'Побудова графіків функцій',
+        'about.features.matrix': 'Операції з матрицями',
+        'about.features.derivative': 'Обчислення похідних та інтегралів',
+        'about.features.physics': 'Фізичні формули та перетворення',
+        'about.features.multilang': 'Підтримка двох мов (UA/EN)',
+        'about.features.themes': 'Кілька тем оформлення',
+        'about.contact.title': ' Контакти',
+        'about.contact.desc': 'Якщо ви знайшли помилку або маєте пропозиції щодо покращення, будь ласка, зв\'яжіться зі мною:',
+        'about.license': '© 2026 imtiredwhenitalk. Навчальний проєкт.',
     },
     en: {
         title: 'Calculator',
@@ -269,6 +339,76 @@ const translations = {
         'status.integral.range': 'Invalid integration bounds.',
         'status.integral.input': 'Invalid parameters.',
         'status.integral.error': 'Integral error.',
+        // Physics
+        'view.physiclab': 'Physics Lab',
+        'view.settings': 'Settings',
+        'view.about': 'About',
+        'physiclab.subtitle': 'Physics Lab',
+        'physiclab.title': 'Formulas, transformations, calculations',
+        'physiclab.helper': 'Choose a physics section for calculations.',
+        'tab.kinematics': 'Kinematics',
+        'tab.dynamics': 'Dynamics',
+        'tab.energy': 'Energy',
+        'tab.electricity': 'Electricity',
+        'physic.kinematics.title': 'Uniformly accelerated motion',
+        'physic.dynamics.title': 'Newton\'s second law',
+        'physic.energy.title': 'Kinetic and potential energy',
+        'physic.electricity.title': 'Ohm\'s law and power',
+        'physic.v0': 'Initial velocity v₀ (m/s):',
+        'physic.a': 'Acceleration a (m/s²):',
+        'physic.t': 'Time t (s):',
+        'physic.m': 'Mass m (kg):',
+        'physic.a.dyn': 'Acceleration a (m/s²):',
+        'physic.m.ener': 'Mass m (kg):',
+        'physic.v.ener': 'Velocity v (m/s):',
+        'physic.h': 'Height h (m):',
+        'physic.u': 'Voltage U (V):',
+        'physic.r': 'Resistance R (Ω):',
+        'physic.calc': 'Calculate velocity v',
+        'physic.calc.s': 'Calculate distance s',
+        'physic.calc.f': 'Calculate force F',
+        'physic.calc.ek': 'Kinetic Eₖ',
+        'physic.calc.ep': 'Potential Eₚ',
+        'physic.calc.i': 'Calculate current I',
+        'physic.calc.p': 'Calculate power P',
+        'physic.result': 'Result:',
+        'physic.formulas': 'Formulas:',
+        // Settings
+        'settings.subtitle': 'Settings',
+        'settings.title': 'Personalization',
+        'settings.helper': 'Customize the app for yourself.',
+        'settings.theme.title': 'Theme',
+        'settings.theme.desc': 'Choose the app color scheme',
+        'settings.theme.dark': 'Dark',
+        'settings.theme.light': 'Light',
+        'settings.theme.purple': 'Purple',
+        'settings.theme.blue': 'Blue',
+        'settings.lang.title': 'Interface Language',
+        'settings.lang.desc': 'Choose app language',
+        'settings.lang.uk': 'Українська',
+        'settings.lang.en': 'English',
+        'settings.misc.title': 'Other',
+        'settings.misc.desc': 'Additional options',
+        'settings.misc.sound': 'Sound effects',
+        'settings.misc.animations': 'Animations',
+        // About
+        'about.subtitle': 'About',
+        'about.title': 'Information',
+        'about.developer.title': ' Developer',
+        'about.developer.name': 'Created by: imtiredwhenitalk',
+        'about.developer.desc': 'A student passionate about programming and mathematics. This calculator was created as an educational project to demonstrate the capabilities of web technologies and mathematical computations.',
+        'about.tech.title': ' Technologies',
+        'about.features.title': ' Features',
+        'about.features.calc': 'Scientific calculator with trigonometric functions',
+        'about.features.graphs': 'Function graph plotting',
+        'about.features.matrix': 'Matrix operations',
+        'about.features.derivative': 'Derivative and integral calculations',
+        'about.features.physics': 'Physics formulas and transformations',
+        'about.features.multilang': 'Support for two languages (UA/EN)',
+        'about.features.themes': 'Multiple themes',
+        'about.contact.title': ' Contact',
+        'about.contact.desc': 'If you found a bug or have suggestions for improvement, please contact me:',
+        'about.license': '© 2026 imtiredwhenitalk. Educational project.',
     },
 };
 
@@ -417,6 +557,46 @@ const formatNumber = (value) => {
 
 const toNumber = (value) => (typeof value === 'number' && Number.isFinite(value) ? value : null);
 
+// Custom plugin for drawing coordinate axes
+const axesPlugin = {
+    id: 'crosshair',
+    beforeDatasetsDraw: function(chart) {
+        const { ctx, chartArea, scales } = chart;
+        const { x: xScale, y: yScale } = scales;
+        
+        if (!chartArea || !xScale || !yScale) return;
+        
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 2;
+        
+        // Draw Y-axis (x = 0) if in range
+        if (xScale.min <= 0 && xScale.max >= 0) {
+            const xPos = xScale.getPixelForValue(0);
+            ctx.beginPath();
+            ctx.moveTo(xPos, chartArea.top);
+            ctx.lineTo(xPos, chartArea.bottom);
+            ctx.stroke();
+        }
+        
+        // Draw X-axis (y = 0) if in range
+        if (yScale.min <= 0 && yScale.max >= 0) {
+            const yPos = yScale.getPixelForValue(0);
+            ctx.beginPath();
+            ctx.moveTo(chartArea.left, yPos);
+            ctx.lineTo(chartArea.right, yPos);
+            ctx.stroke();
+        }
+        
+        ctx.restore();
+    }
+};
+
+// Register the plugin
+if (typeof Chart !== 'undefined') {
+    Chart.register(axesPlugin);
+}
+
 const plotGraph = () => {
     // Gather all expressions from both inputs
     let expressions = [];
@@ -447,8 +627,8 @@ const plotGraph = () => {
         return;
     }
 
-    const steps = 1024;
-    const threshold = 100;
+    const steps = 2000;
+    const threshold = 1000;
     const palette = ['#f59f0b', '#38bdf8', '#a855f7', '#f43f5e', '#22c55e', '#ec4899', '#10b981', '#06b6d4'];
 
     let compiledExpressions = [];
@@ -489,6 +669,9 @@ const plotGraph = () => {
         const dataPoints = [];
         let lastValidY = null;
         
+        // Ensure we always include x=0 if it's in range
+        const includeZero = minValue <= 0 && maxValue >= 0;
+        
         for (let i = 0; i < steps; i += 1) {
             const x = minValue + (maxValue - minValue) * (i / (steps - 1));
             try {
@@ -503,16 +686,36 @@ const plotGraph = () => {
                 
                 // Handle discontinuities (like tan at pi/2)
                 if (numericY !== null && Number.isFinite(numericY) && Math.abs(numericY) < threshold) {
-                    dataPoints.push({ x, y: numericY });
+                    dataPoints.push({ x: parseFloat(x.toFixed(10)), y: parseFloat(numericY.toFixed(10)) });
                     lastValidY = numericY;
                 } else if (Math.abs(numericY) >= threshold) {
                     // Skip outliers for discontinuous functions
-                    dataPoints.push({ x, y: null });
+                    dataPoints.push({ x: parseFloat(x.toFixed(10)), y: null });
                 } else {
-                    dataPoints.push({ x, y: null });
+                    dataPoints.push({ x: parseFloat(x.toFixed(10)), y: null });
                 }
             } catch (e) {
-                dataPoints.push({ x, y: null });
+                dataPoints.push({ x: parseFloat(x.toFixed(10)), y: null });
+            }
+        }
+        
+        // Ensure x=0 point exists if in range
+        if (includeZero && !dataPoints.some(p => Math.abs(p.x) < 0.001)) {
+            try {
+                const y = compiledItem.compiled.evaluate({ 
+                    x: 0, 
+                    pi: mathInstance.pi, 
+                    e: mathInstance.e,
+                    PI: mathInstance.pi,
+                    E: mathInstance.e 
+                });
+                const numericY = toNumber(y);
+                if (numericY !== null && Number.isFinite(numericY)) {
+                    dataPoints.push({ x: 0, y: numericY });
+                    dataPoints.sort((a, b) => a.x - b.x);
+                }
+            } catch (e) {
+                // Ignore error
             }
         }
 
@@ -524,7 +727,7 @@ const plotGraph = () => {
             backgroundColor: color + '08',
             borderWidth: 2.5,
             pointRadius: 0,
-            tension: 0.0,
+            tension: 0.05,
             fill: false,
             spanGaps: false,
             segment: {
@@ -605,76 +808,80 @@ const plotGraph = () => {
                 scales: {
                     x: {
                         type: 'linear',
-                        position: 'center',
+                        position: 'bottom',
                         min: minValue,
                         max: maxValue,
                         grid: {
                             color: (context) => {
                                 if (Math.abs(context.tick.value) < 0.01) {
-                                    return 'rgba(255, 255, 255, 0.4)';
+                                    return 'rgba(255, 255, 255, 0.5)';
                                 }
-                                return 'rgba(100, 150, 200, 0.08)';
+                                return 'rgba(100, 150, 200, 0.1)';
                             },
                             lineWidth: (context) => {
                                 if (Math.abs(context.tick.value) < 0.01) {
                                     return 2;
                                 }
-                                return 0.5;
+                                return 1;
                             },
-                            drawBorder: false,
+                            drawBorder: true,
                             drawTicks: true,
                         },
                         ticks: {
                             color: '#94a3b8',
                             font: {
-                                size: 10,
+                                size: 11,
                                 weight: '500',
                             },
                             stepSize: undefined,
                             padding: 8,
+                            maxTicksLimit: 15,
                             callback: function(value) {
-                                if (value === 0) return '0';
-                                return value > 0 ? '+' + value.toFixed(0) : value.toFixed(0);
-                            }
-                        },
-                        border: {
-                            display: false,
-                        },
-                    },
-                    y: {
-                        type: 'linear',
-                        position: 'center',
-                        grid: {
-                            color: (context) => {
-                                if (Math.abs(context.tick.value) < 0.01) {
-                                    return 'rgba(255, 255, 255, 0.4)';
-                                }
-                                return 'rgba(100, 150, 200, 0.08)';
-                            },
-                            lineWidth: (context) => {
-                                if (Math.abs(context.tick.value) < 0.01) {
-                                    return 2;
-                                }
-                                return 0.5;
-                            },
-                            drawBorder: false,
-                            drawTicks: true,
-                        },
-                        ticks: {
-                            color: '#94a3b8',
-                            font: {
-                                size: 10,
-                                weight: '500',
-                            },
-                            stepSize: undefined,
-                            padding: 8,
-                            callback: function(value) {
-                                if (value === 0) return '0';
+                                if (Math.abs(value) < 0.01) return '0';
                                 return value.toFixed(1);
                             }
                         },
                         border: {
-                            display: false,
+                            display: true,
+                            color: 'rgba(148, 163, 184, 0.3)',
+                        },
+                    },
+                    y: {
+                        type: 'linear',
+                        position: 'left',
+                        grid: {
+                            color: (context) => {
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 'rgba(255, 255, 255, 0.5)';
+                                }
+                                return 'rgba(100, 150, 200, 0.1)';
+                            },
+                            lineWidth: (context) => {
+                                if (Math.abs(context.tick.value) < 0.01) {
+                                    return 2;
+                                }
+                                return 1;
+                            },
+                            drawBorder: true,
+                            drawTicks: true,
+                        },
+                        ticks: {
+                            color: '#94a3b8',
+                            font: {
+                                size: 11,
+                                weight: '500',
+                            },
+                            stepSize: undefined,
+                            padding: 8,
+                            maxTicksLimit: 12,
+                            callback: function(value) {
+                                if (Math.abs(value) < 0.01) return '0';
+                                return value.toFixed(1);
+                            }
+                        },
+                        border: {
+                            display: true,
+                            color: 'rgba(148, 163, 184, 0.3)',
                         },
                     },
                 },
@@ -945,5 +1152,226 @@ if (langSelect) {
     langSelect.addEventListener('change', () => {
         localStorage.setItem('calc-lang', langSelect.value);
         applyLocale(langSelect.value);
+    });
+}
+
+// === Фізичні обчислення ===
+
+// Кінематика
+const physV0 = document.getElementById('phys-v0');
+const physA = document.getElementById('phys-a');
+const physT = document.getElementById('phys-t');
+const physCalcV = document.getElementById('phys-calc-v');
+const physCalcS = document.getElementById('phys-calc-s');
+const physResult = document.getElementById('phys-result');
+const physInfo = document.getElementById('phys-info');
+const physStatus = document.getElementById('phys-status');
+
+if (physCalcV) {
+    physCalcV.addEventListener('click', () => {
+        const v0 = parseFloat(physV0.value);
+        const a = parseFloat(physA.value);
+        const t = parseFloat(physT.value);
+        
+        if (!Number.isFinite(v0) || !Number.isFinite(a) || !Number.isFinite(t)) {
+            physStatus.textContent = 'Некоректні дані';
+            return;
+        }
+        
+        const v = v0 + a * t;
+        physResult.textContent = `${v.toFixed(2)} м/с`;
+        physInfo.textContent = `v = v₀ + at = ${v0} + ${a}×${t} = ${v.toFixed(2)} м/с`;
+        physStatus.textContent = '';
+    });
+}
+
+if (physCalcS) {
+    physCalcS.addEventListener('click', () => {
+        const v0 = parseFloat(physV0.value);
+        const a = parseFloat(physA.value);
+        const t = parseFloat(physT.value);
+        
+        if (!Number.isFinite(v0) || !Number.isFinite(a) || !Number.isFinite(t)) {
+            physStatus.textContent = 'Некоректні дані';
+            return;
+        }
+        
+        const s = v0 * t + 0.5 * a * t * t;
+        physResult.textContent = `${s.toFixed(2)} м`;
+        physInfo.textContent = `s = v₀t + ½at² = ${v0}×${t} + 0.5×${a}×${t}² = ${s.toFixed(2)} м`;
+        physStatus.textContent = '';
+    });
+}
+
+// Динаміка
+const physM = document.getElementById('phys-m');
+const physADyn = document.getElementById('phys-a-dyn');
+const physCalcF = document.getElementById('phys-calc-f');
+const physDynResult = document.getElementById('phys-dyn-result');
+const physDynInfo = document.getElementById('phys-dyn-info');
+const physDynStatus = document.getElementById('phys-dyn-status');
+
+if (physCalcF) {
+    physCalcF.addEventListener('click', () => {
+        const m = parseFloat(physM.value);
+        const a = parseFloat(physADyn.value);
+        
+        if (!Number.isFinite(m) || !Number.isFinite(a)) {
+            physDynStatus.textContent = 'Некоректні дані';
+            return;
+        }
+        
+        const f = m * a;
+        physDynResult.textContent = `${f.toFixed(2)} Н`;
+        physDynInfo.textContent = `F = ma = ${m}×${a} = ${f.toFixed(2)} Н (Ньютон)`;
+        physDynStatus.textContent = '';
+    });
+}
+
+// Енергія
+const physMEner = document.getElementById('phys-m-ener');
+const physVEner = document.getElementById('phys-v-ener');
+const physH = document.getElementById('phys-h');
+const physCalcEk = document.getElementById('phys-calc-ek');
+const physCalcEp = document.getElementById('phys-calc-ep');
+const physEnerResult = document.getElementById('phys-ener-result');
+const physEnerInfo = document.getElementById('phys-ener-info');
+const physEnerStatus = document.getElementById('phys-ener-status');
+
+if (physCalcEk) {
+    physCalcEk.addEventListener('click', () => {
+        const m = parseFloat(physMEner.value);
+        const v = parseFloat(physVEner.value);
+        
+        if (!Number.isFinite(m) || !Number.isFinite(v)) {
+            physEnerStatus.textContent = 'Некоректні дані';
+            return;
+        }
+        
+        const ek = 0.5 * m * v * v;
+        physEnerResult.textContent = `${ek.toFixed(2)} Дж`;
+        physEnerInfo.textContent = `Eₖ = ½mv² = 0.5×${m}×${v}² = ${ek.toFixed(2)} Дж (Джоуль)`;
+        physEnerStatus.textContent = '';
+    });
+}
+
+if (physCalcEp) {
+    physCalcEp.addEventListener('click', () => {
+        const m = parseFloat(physMEner.value);
+        const h = parseFloat(physH.value);
+        const g = 9.8;
+        
+        if (!Number.isFinite(m) || !Number.isFinite(h)) {
+            physEnerStatus.textContent = 'Некоректні дані';
+            return;
+        }
+        
+        const ep = m * g * h;
+        physEnerResult.textContent = `${ep.toFixed(2)} Дж`;
+        physEnerInfo.textContent = `Eₚ = mgh = ${m}×${g}×${h} = ${ep.toFixed(2)} Дж (Джоуль)`;
+        physEnerStatus.textContent = '';
+    });
+}
+
+// Електрика
+const physU = document.getElementById('phys-u');
+const physR = document.getElementById('phys-r');
+const physCalcI = document.getElementById('phys-calc-i');
+const physCalcP = document.getElementById('phys-calc-p');
+const physElecResult = document.getElementById('phys-elec-result');
+const physElecInfo = document.getElementById('phys-elec-info');
+const physElecStatus = document.getElementById('phys-elec-status');
+
+if (physCalcI) {
+    physCalcI.addEventListener('click', () => {
+        const u = parseFloat(physU.value);
+        const r = parseFloat(physR.value);
+        
+        if (!Number.isFinite(u) || !Number.isFinite(r) || r === 0) {
+            physElecStatus.textContent = 'Некоректні дані або R = 0';
+            return;
+        }
+        
+        const i = u / r;
+        physElecResult.textContent = `${i.toFixed(4)} А`;
+        physElecInfo.textContent = `I = U/R = ${u}/${r} = ${i.toFixed(4)} А (Ампер)`;
+        physElecStatus.textContent = '';
+    });
+}
+
+if (physCalcP) {
+    physCalcP.addEventListener('click', () => {
+        const u = parseFloat(physU.value);
+        const r = parseFloat(physR.value);
+        
+        if (!Number.isFinite(u) || !Number.isFinite(r) || r === 0) {
+            physElecStatus.textContent = 'Некоректні дані або R = 0';
+            return;
+        }
+        
+        const p = (u * u) / r;
+        physElecResult.textContent = `${p.toFixed(2)} Вт`;
+        physElecInfo.textContent = `P = U²/R = ${u}²/${r} = ${p.toFixed(2)} Вт (Ватт)`;
+        physElecStatus.textContent = '';
+    });
+}
+
+// === Налаштування теми ===
+const themeButtons = document.querySelectorAll('.theme-option');
+const currentTheme = localStorage.getItem('calc-theme') || 'dark';
+document.body.setAttribute('data-theme', currentTheme);
+
+themeButtons.forEach(btn => {
+    const theme = btn.getAttribute('data-theme');
+    if (theme === currentTheme) {
+        btn.classList.add('is-active');
+    }
+    
+    btn.addEventListener('click', () => {
+        const selectedTheme = btn.getAttribute('data-theme');
+        document.body.setAttribute('data-theme', selectedTheme);
+        localStorage.setItem('calc-theme', selectedTheme);
+        
+        themeButtons.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+    });
+});
+
+// Синхронізація мовних налаштувань
+const langRadios = document.querySelectorAll('input[name="language"]');
+langRadios.forEach(radio => {
+    if (radio.value === langSelect.value) {
+        radio.checked = true;
+    }
+    
+    radio.addEventListener('change', () => {
+        langSelect.value = radio.value;
+        localStorage.setItem('calc-lang', radio.value);
+        applyLocale(radio.value);
+    });
+});
+
+// Налаштування звуку та анімацій
+const soundToggle = document.getElementById('sound-toggle');
+const animationsToggle = document.getElementById('animations-toggle');
+
+if (soundToggle) {
+    const soundEnabled = localStorage.getItem('calc-sound') === 'true';
+    soundToggle.checked = soundEnabled;
+    soundToggle.addEventListener('change', () => {
+        localStorage.setItem('calc-sound', soundToggle.checked);
+    });
+}
+
+if (animationsToggle) {
+    const animEnabled = localStorage.getItem('calc-animations') !== 'false';
+    animationsToggle.checked = animEnabled;
+    animationsToggle.addEventListener('change', () => {
+        localStorage.setItem('calc-animations', animationsToggle.checked);
+        if (animationsToggle.checked) {
+            document.body.style.setProperty('--animation-speed', '1');
+        } else {
+            document.body.style.setProperty('--animation-speed', '0');
+        }
     });
 }
