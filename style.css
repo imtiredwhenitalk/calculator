@@ -909,6 +909,413 @@ body {
     }
 }
 
+/* Формули фізики */
+.formula-reference {
+    margin-top: 24px;
+    padding: 16px;
+    background: rgba(79, 70, 229, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.formula-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formula-list li {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-soft);
+}
+
+.formula-list strong {
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
+    margin-right: 8px;
+}
+
+/* Налаштування */
+.settings-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.setting-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.setting-header {
+    margin-bottom: 16px;
+}
+
+.setting-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #eef2ff;
+    margin-bottom: 4px;
+}
+
+.setting-description {
+    font-size: 13px;
+    color: rgba(226, 232, 240, 0.6);
+}
+
+/* Вибір теми */
+.theme-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--text-soft);
+    font-size: 13px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.theme-option:hover {
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-2px);
+}
+
+.theme-option.is-active {
+    border-color: rgba(124, 58, 237, 0.8);
+    background: rgba(79, 70, 229, 0.2);
+}
+
+.theme-preview {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.theme-light {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.theme-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+}
+
+.theme-blue {
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+}
+
+/* Вибір мови */
+.lang-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.lang-option {
+    cursor: pointer;
+}
+
+.lang-option input[type="radio"] {
+    display: none;
+}
+
+.lang-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    transition: all 0.2s ease;
+}
+
+.lang-option:hover .lang-card {
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-2px);
+}
+
+.lang-option input[type="radio"]:checked + .lang-card {
+    border-color: rgba(124, 58, 237, 0.8);
+    background: rgba(79, 70, 229, 0.2);
+}
+
+.lang-flag {
+    font-size: 28px;
+}
+
+.lang-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-soft);
+}
+
+/* Додаткові налаштування */
+.misc-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toggle-setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.toggle-setting:hover {
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.toggle-setting input[type="checkbox"] {
+    width: 44px;
+    height: 24px;
+    appearance: none;
+    background: rgba(71, 85, 105, 0.6);
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.toggle-setting input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    background: white;
+    transition: transform 0.2s ease;
+}
+
+.toggle-setting input[type="checkbox"]:checked {
+    background: rgba(124, 58, 237, 0.8);
+}
+
+.toggle-setting input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+}
+
+/* Про додаток */
+.about-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.about-card {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.about-heading {
+    font-size: 20px;
+    font-weight: 600;
+    color: #eef2ff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.about-text {
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.about-text p {
+    margin-bottom: 12px;
+}
+
+.about-text p:last-child {
+    margin-bottom: 0;
+}
+
+.about-text strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Технології */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.tech-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.tech-item:hover {
+    background: rgba(15, 23, 42, 0.6);
+    transform: translateY(-2px);
+}
+
+.tech-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.tech-item strong {
+    display: block;
+    color: #eef2ff;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.tech-desc {
+    font-size: 12px;
+    color: rgba(226, 232, 240, 0.6);
+    margin: 0;
+}
+
+/* Можливості */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feature-list li {
+    padding: 12px 12px 12px 40px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 8px;
+    position: relative;
+    color: var(--text-soft);
+    font-size: 14px;
+}
+
+.feature-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 12px;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Контакти */
+.contact-info {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 8px;
+}
+
+.link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Футер про додаток */
+.about-footer {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 8px;
+    color: rgba(226, 232, 240, 0.6);
+    font-size: 13px;
+}
+
+.version {
+    margin-top: 8px;
+    color: rgba(226, 232, 240, 0.4);
+    font-size: 12px;
+}
+
+/* Теми */
+body[data-theme="light"] {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .panel {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+body[data-theme="light"] .btn {
+    background: rgba(241, 245, 249, 0.8);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .display,
+body[data-theme="light"] .field {
+    background: rgba(241, 245, 249, 0.6);
+    color: #1e293b;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="purple"] {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.25), transparent 60%),
+        #0a0118;
+}
+
+body[data-theme="purple"] .panel {
+    background: rgba(88, 28, 135, 0.2);
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+body[data-theme="blue"] {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(96, 165, 250, 0.25), transparent 60%),
+        #030712;
+}
+
+body[data-theme="blue"] .panel {
+    background: rgba(30, 58, 138, 0.2);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
 @media (max-width: 640px) {
     .panel {
         padding: 16px;
@@ -957,5 +1364,13 @@ body {
     .range-inputs {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .theme-picker {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
